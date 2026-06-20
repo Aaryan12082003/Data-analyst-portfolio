@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aaryan Tomar — Data Analyst</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#0F1419;
+  --bg-raised:#161D26;
+  --bg-card:#131A22;
+  --line:#252E38;
+  --text:#E8E6E1;
+  --text-dim:#8A95A1;
+  --text-faint:#5C6773;
+  --blue:#5B8DEF;
+  --blue-dim:#3A5A9E;
+  --amber:#E8A33D;
+  --green:#4FAE7D;
+  --red:#E0626B;
+  --mono:'JetBrains Mono', monospace;
+  --sans:'Inter', sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--sans);
+  line-height:1.5;
+  overflow-x:hidden;
+}
+::selection{background:var(--blue);color:#0F1419;}
+
+a{color:inherit;text-decoration:none;}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;}
+:focus-visible{outline:2px solid var(--blue);outline-offset:3px;}
+
+.container{max-width:1180px;margin:0 auto;padding:0 32px;}
+@media(max-width:640px){.container{padding:0 20px;}}
+
+/* ---------- NAV ---------- */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(15,20,25,0.85);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+}
+.nav-inner{
+  max-width:1180px;margin:0 auto;padding:0 32px;
+  display:flex;align-items:center;justify-content:space-between;
+  height:64px;
+}
+.nav-logo{font-family:var(--mono);font-weight:600;font-size:14px;letter-spacing:0.02em;color:var(--text);}
+.nav-logo span{color:var(--blue);}
+.nav-links{display:flex;gap:32px;font-family:var(--mono);font-size:13px;color:var(--text-dim);}
+.nav-links a{transition:color .2s;position:relative;}
+.nav-links a:hover{color:var(--text);}
+.nav-links a::before{content:attr(data-num);color:var(--text-faint);margin-right:6px;}
+.nav-cta{
+  font-family:var(--mono);font-size:13px;
+  border:1px solid var(--line);padding:8px 16px;border-radius:4px;
+  color:var(--text);transition:border-color .2s,background .2s;
+}
+.nav-cta:hover{border-color:var(--blue);background:rgba(91,141,239,0.08);}
+.nav-toggle{display:none;}
+@media(max-width:780px){
+  .nav-links{display:none;}
+  .nav-toggle{display:block;font-family:var(--mono);font-size:13px;border:1px solid var(--line);padding:8px 12px;border-radius:4px;}
+}
+
+/* ---------- HERO ---------- */
+.hero{
+  min-height:100vh;
+  display:flex;flex-direction:column;justify-content:center;
+  padding-top:120px;padding-bottom:80px;
+  position:relative;
+}
+.hero-grid{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size:48px 48px;
+  opacity:0.35;
+  mask-image:radial-gradient(ellipse 80% 60% at 50% 30%, black 0%, transparent 70%);
+}
+.query-console{
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  border-radius:8px;
+  max-width:720px;
+  margin-bottom:36px;
+  font-family:var(--mono);
+  font-size:14px;
+  box-shadow:0 20px 60px -20px rgba(0,0,0,0.6);
+  position:relative;
+  z-index:1;
+}
+.console-bar{
+  display:flex;align-items:center;gap:8px;
+  padding:10px 14px;border-bottom:1px solid var(--line);
+}
+.console-dot{width:9px;height:9px;border-radius:50%;background:var(--text-faint);opacity:0.5;}
+.console-title{margin-left:8px;color:var(--text-faint);font-size:12px;}
+.console-body{padding:18px 20px;min-height:96px;}
+.console-line{color:var(--text-dim);}
+.console-line .kw{color:var(--blue);}
+.console-line .str{color:var(--amber);}
+.console-cursor{display:inline-block;width:8px;height:16px;background:var(--blue);vertical-align:middle;margin-left:2px;animation:blink 1s step-end infinite;}
+@keyframes blink{50%{opacity:0;}}
+.console-result{margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);opacity:0;transition:opacity .4s;}
+.console-result.show{opacity:1;}
+.result-row{display:flex;gap:14px;color:var(--text-faint);font-size:12px;margin-bottom:4px;}
+.result-row b{color:var(--green);}
+
+.hero-title{
+  font-family:var(--sans);
+  font-weight:800;
+  font-size:clamp(38px, 6vw, 64px);
+  line-height:1.05;
+  letter-spacing:-0.02em;
+  max-width:780px;
+  z-index:1;
+}
+.hero-title .accent{color:var(--blue);}
+.hero-sub{
+  margin-top:20px;
+  max-width:560px;
+  color:var(--text-dim);
+  font-size:17px;
+  line-height:1.65;
+  z-index:1;
+}
+.hero-tags{
+  display:flex;gap:10px;flex-wrap:wrap;margin-top:28px;z-index:1;
+}
+.tag{
+  font-family:var(--mono);font-size:12px;color:var(--text-dim);
+  border:1px solid var(--line);padding:6px 12px;border-radius:100px;
+}
+.hero-actions{margin-top:36px;display:flex;gap:14px;z-index:1;flex-wrap:wrap;}
+.btn-primary{
+  font-family:var(--mono);font-size:14px;font-weight:500;
+  background:var(--blue);color:#0B0F14;
+  padding:13px 24px;border-radius:6px;
+  transition:transform .15s, box-shadow .15s;
+  display:inline-flex;align-items:center;gap:8px;
+}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 8px 20px -8px rgba(91,141,239,0.5);}
+.btn-secondary{
+  font-family:var(--mono);font-size:14px;
+  border:1px solid var(--line);color:var(--text);
+  padding:13px 24px;border-radius:6px;
+  transition:border-color .2s,background .2s;
+}
+.btn-secondary:hover{border-color:var(--text-dim);background:var(--bg-raised);}
+
+/* ---------- SECTION SCAFFOLD ---------- */
+section{padding:100px 0;border-top:1px solid var(--line);}
+.section-head{margin-bottom:56px;}
+.eyebrow{
+  font-family:var(--mono);font-size:12px;color:var(--blue);
+  letter-spacing:0.08em;text-transform:uppercase;
+  display:flex;align-items:center;gap:10px;margin-bottom:14px;
+}
+.eyebrow::before{content:'';width:18px;height:1px;background:var(--blue);}
+.section-title{font-size:clamp(26px,4vw,36px);font-weight:800;letter-spacing:-0.01em;}
+.section-desc{color:var(--text-dim);max-width:620px;margin-top:14px;font-size:15.5px;line-height:1.7;}
+
+/* ---------- ABOUT / SKILLS ---------- */
+.about-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:64px;}
+@media(max-width:880px){.about-grid{grid-template-columns:1fr;gap:48px;}}
+.about-text p{color:var(--text-dim);font-size:15.5px;line-height:1.75;margin-bottom:16px;}
+.about-text strong{color:var(--text);font-weight:600;}
+.skill-block{margin-bottom:26px;}
+.skill-block:last-child{margin-bottom:0;}
+.skill-label{
+  font-family:var(--mono);font-size:12px;color:var(--text-faint);
+  text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;
+}
+.skill-pills{display:flex;flex-wrap:wrap;gap:8px;}
+.pill{
+  font-family:var(--mono);font-size:12.5px;
+  background:var(--bg-card);border:1px solid var(--line);
+  padding:6px 12px;border-radius:5px;color:var(--text-dim);
+  transition:border-color .2s,color .2s;
+}
+.pill:hover{border-color:var(--blue-dim);color:var(--text);}
+
+/* ---------- EXPERIENCE TIMELINE ---------- */
+.exp-card{
+  background:var(--bg-card);border:1px solid var(--line);border-radius:10px;
+  padding:32px;display:grid;grid-template-columns:200px 1fr;gap:32px;
+}
+@media(max-width:700px){.exp-card{grid-template-columns:1fr;gap:16px;}}
+.exp-meta{font-family:var(--mono);font-size:13px;color:var(--text-faint);}
+.exp-meta .role-dates{color:var(--amber);margin-bottom:6px;}
+.exp-role{font-size:19px;font-weight:700;margin-bottom:4px;}
+.exp-company{color:var(--blue);font-family:var(--mono);font-size:13.5px;margin-bottom:18px;}
+.exp-list{list-style:none;}
+.exp-list li{
+  color:var(--text-dim);font-size:14.5px;line-height:1.65;
+  padding-left:18px;position:relative;margin-bottom:10px;
+}
+.exp-list li::before{content:'→';position:absolute;left:0;color:var(--blue-dim);font-family:var(--mono);}
+
+/* ---------- PROJECTS / DASHBOARDS ---------- */
+.project{margin-bottom:28px;}
+.project-card{
+  background:var(--bg-card);border:1px solid var(--line);border-radius:12px;overflow:hidden;
+}
+.project-header{
+  padding:26px 28px;border-bottom:1px solid var(--line);
+  display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap;
+}
+.project-name{font-size:20px;font-weight:700;margin-bottom:6px;}
+.project-tool{font-family:var(--mono);font-size:12px;color:var(--text-faint);}
+.project-tool b{color:var(--amber);}
+.project-desc{color:var(--text-dim);font-size:14px;max-width:520px;margin-top:8px;line-height:1.6;}
+.project-stack{display:flex;gap:8px;flex-wrap:wrap;}
+.chip{font-family:var(--mono);font-size:11px;color:var(--text-dim);border:1px solid var(--line);padding:4px 10px;border-radius:100px;}
+
+.dash-body{padding:28px;}
+.dash-controls{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px;}
+.filter-btn{
+  font-family:var(--mono);font-size:12.5px;
+  border:1px solid var(--line);padding:8px 14px;border-radius:6px;
+  color:var(--text-dim);transition:all .15s;
+}
+.filter-btn:hover{border-color:var(--text-dim);color:var(--text);}
+.filter-btn.active{background:var(--blue);color:#0B0F14;border-color:var(--blue);}
+
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px;}
+@media(max-width:780px){.kpi-row{grid-template-columns:repeat(2,1fr);}}
+.kpi{background:var(--bg-raised);border:1px solid var(--line);border-radius:8px;padding:16px 18px;}
+.kpi-label{font-family:var(--mono);font-size:11px;color:var(--text-faint);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;}
+.kpi-value{font-family:var(--mono);font-size:24px;font-weight:700;color:var(--text);}
+.kpi-delta{font-family:var(--mono);font-size:11.5px;margin-top:4px;}
+.kpi-delta.up{color:var(--green);}
+.kpi-delta.down{color:var(--red);}
+
+.chart-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:18px;}
+@media(max-width:880px){.chart-grid{grid-template-columns:1fr;}}
+.chart-box{background:var(--bg-raised);border:1px solid var(--line);border-radius:8px;padding:18px;}
+.chart-box-title{font-family:var(--mono);font-size:12px;color:var(--text-dim);margin-bottom:14px;text-transform:uppercase;letter-spacing:0.04em;}
+.chart-canvas-wrap{position:relative;height:240px;}
+.chart-canvas-wrap.tall{height:300px;}
+
+.table-wrap{margin-top:18px;background:var(--bg-raised);border:1px solid var(--line);border-radius:8px;overflow:hidden;}
+table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:12.5px;}
+thead th{
+  text-align:left;padding:12px 16px;color:var(--text-faint);
+  border-bottom:1px solid var(--line);font-weight:500;text-transform:uppercase;font-size:11px;letter-spacing:0.04em;
+  cursor:pointer;user-select:none;
+}
+thead th:hover{color:var(--text);}
+thead th.sorted::after{content:' ▾';color:var(--blue);}
+tbody td{padding:11px 16px;border-bottom:1px solid var(--line);color:var(--text-dim);}
+tbody tr:last-child td{border-bottom:none;}
+tbody tr:hover{background:rgba(91,141,239,0.05);}
+.cell-num{color:var(--text);}
+.cell-pos{color:var(--green);}
+
+/* SQL project specific */
+.sql-editor{background:#0A0D11;border-radius:8px;font-family:var(--mono);font-size:13px;overflow:hidden;border:1px solid var(--line);}
+.sql-tabs{display:flex;border-bottom:1px solid var(--line);}
+.sql-tab{padding:10px 18px;font-size:12px;color:var(--text-faint);border-right:1px solid var(--line);transition:color .2s,background .2s;}
+.sql-tab.active{color:var(--text);background:var(--bg-card);}
+.sql-tab:hover{color:var(--text);}
+.sql-pre{padding:18px 20px;color:var(--text-dim);line-height:1.7;white-space:pre-wrap;min-height:140px;}
+.sql-pre .k{color:var(--blue);}
+.sql-pre .f{color:var(--amber);}
+.sql-pre .c{color:var(--text-faint);}
+.run-row{display:flex;justify-content:space-between;align-items:center;padding:12px 20px;border-top:1px solid var(--line);}
+.run-btn{font-family:var(--mono);font-size:12.5px;background:var(--green);color:#0B0F14;padding:8px 16px;border-radius:5px;display:flex;align-items:center;gap:6px;}
+.run-status{font-family:var(--mono);font-size:11.5px;color:var(--text-faint);}
+
+/* Excel project specific */
+.xl-toolbar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
+.xl-fn-btn{font-family:var(--mono);font-size:12px;border:1px solid var(--line);padding:7px 12px;border-radius:5px;color:var(--text-dim);}
+.xl-fn-btn:hover{border-color:var(--amber);color:var(--text);}
+.formula-bar{
+  font-family:var(--mono);font-size:13px;background:var(--bg-raised);
+  border:1px solid var(--line);border-radius:6px;padding:10px 14px;margin-bottom:14px;
+  color:var(--amber);overflow-x:auto;white-space:nowrap;
+}
+.formula-bar span{color:var(--text-faint);}
+
+/* ---------- CONTACT ---------- */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;}
+@media(max-width:780px){.contact-grid{grid-template-columns:1fr;}}
+.contact-list{display:flex;flex-direction:column;gap:18px;}
+.contact-item{
+  display:flex;align-items:center;gap:14px;
+  font-family:var(--mono);font-size:14.5px;color:var(--text-dim);
+  padding:16px 18px;background:var(--bg-card);border:1px solid var(--line);border-radius:8px;
+  transition:border-color .2s;
+}
+.contact-item:hover{border-color:var(--blue-dim);color:var(--text);}
+.contact-icon{width:18px;color:var(--blue);}
+
+.form-field{margin-bottom:16px;}
+.form-field label{display:block;font-family:var(--mono);font-size:11.5px;color:var(--text-faint);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;}
+.form-field input,.form-field textarea{
+  width:100%;background:var(--bg-card);border:1px solid var(--line);border-radius:6px;
+  padding:12px 14px;color:var(--text);font-family:var(--sans);font-size:14px;
+  transition:border-color .2s;
+}
+.form-field input:focus,.form-field textarea:focus{border-color:var(--blue);outline:none;}
+.form-field textarea{resize:vertical;min-height:100px;}
+.form-status{font-family:var(--mono);font-size:12.5px;color:var(--green);margin-top:12px;min-height:18px;}
+
+footer{padding:36px 0;border-top:1px solid var(--line);}
+.footer-inner{display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:12px;color:var(--text-faint);flex-wrap:wrap;gap:12px;}
+
+.fade-up{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease;}
+.fade-up.in{opacity:1;transform:translateY(0);}
+
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:0.01ms !important;animation-iteration-count:1 !important;transition-duration:0.01ms !important;scroll-behavior:auto !important;}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#top" class="nav-logo">aaryan<span>.</span>tomar</a>
+    <div class="nav-links">
+      <a href="#about" data-num="01">about</a>
+      <a href="#experience" data-num="02">experience</a>
+      <a href="#projects" data-num="03">projects</a>
+      <a href="#contact" data-num="04">contact</a>
+    </div>
+    <a href="#contact" class="nav-cta">Hire me</a>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="hero-grid"></div>
+  <div class="container">
+    <div class="query-console">
+      <div class="console-bar">
+        <div class="console-dot"></div><div class="console-dot"></div><div class="console-dot"></div>
+        <div class="console-title">query_editor — profile.sql</div>
+      </div>
+      <div class="console-body">
+        <div class="console-line" id="typedLine"></div>
+        <div class="console-result" id="consoleResult">
+          <div class="result-row"><span>name</span><b>Aaryan Tomar</b></div>
+          <div class="result-row"><span>role</span><b>Data Analyst</b></div>
+          <div class="result-row"><span>location</span><b>Meerut, India</b></div>
+          <div class="result-row"><span>status</span><b>open_to_work = true</b></div>
+        </div>
+      </div>
+    </div>
+
+    <h1 class="hero-title">I turn raw, messy data into decisions <span class="accent">people actually act on.</span></h1>
+    <p class="hero-sub">Computer Engineering graduate and Data Analyst specializing in SQL, Python, and dashboard design — focused on cleaning what's broken and surfacing what matters.</p>
+    <div class="hero-tags">
+      <span class="tag">Python</span>
+      <span class="tag">SQL</span>
+      <span class="tag">Tableau</span>
+      <span class="tag">Power BI</span>
+      <span class="tag">Excel</span>
+      <span class="tag">EDA</span>
+    </div>
+    <div class="hero-actions">
+      <a href="#projects" class="btn-primary">View dashboards →</a>
+      <a href="#contact" class="btn-secondary">Get in touch</a>
+    </div>
+  </div>
+</header>
+
+<section id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="fade-up">
+        <div class="eyebrow">01 — About</div>
+        <h2 class="section-title">Background</h2>
+        <div class="about-text" style="margin-top:24px;">
+          <p>I'm a recent <strong>Computer Engineering graduate</strong> from Chandigarh University with a strong foundation in data analysis, SQL, Python, and visualization tooling. My coursework and projects span database management, data cleaning, and business intelligence.</p>
+          <p>Most recently, I worked as a <strong>Data Analyst Intern at Zorontech</strong>, where I cleaned and optimized real production datasets, tuned SQL queries for reporting speed, and built Tableau dashboards that management actually used to make calls.</p>
+          <p>I like the unglamorous part of analytics — fixing broken columns, deduplicating records, deciding how to handle nulls — because that's the part that determines whether the chart on top of it can be trusted.</p>
+        </div>
+      </div>
+      <div class="fade-up">
+        <div class="eyebrow">02 — Toolkit</div>
+        <h2 class="section-title" style="margin-bottom:24px;">Skills</h2>
+        <div class="skill-block">
+          <div class="skill-label">Programming & Querying</div>
+          <div class="skill-pills">
+            <span class="pill">Python</span><span class="pill">SQL</span><span class="pill">Microsoft SQL</span>
+          </div>
+        </div>
+        <div class="skill-block">
+          <div class="skill-label">Data Analysis</div>
+          <div class="skill-pills">
+            <span class="pill">Data Cleaning</span><span class="pill">Data Validation</span><span class="pill">Exploratory Data Analysis</span>
+          </div>
+        </div>
+        <div class="skill-block">
+          <div class="skill-label">Tools & Visualization</div>
+          <div class="skill-pills">
+            <span class="pill">Excel (Functions, Pivot Tables)</span><span class="pill">Tableau</span><span class="pill">Power BI</span>
+          </div>
+        </div>
+        <div class="skill-block">
+          <div class="skill-label">Analytics</div>
+          <div class="skill-pills">
+            <span class="pill">Google Analytics</span><span class="pill">Data-driven Decision Making</span>
+          </div>
+        </div>
+        <div class="skill-block">
+          <div class="skill-label">Statistical Literacy</div>
+          <div class="skill-pills">
+            <span class="pill">Probability</span><span class="pill">Hypothesis Testing</span><span class="pill">Correlation</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="container">
+    <div class="section-head fade-up">
+      <div class="eyebrow">03 — Experience</div>
+      <h2 class="section-title">Where I've worked</h2>
+    </div>
+    <div class="exp-card fade-up">
+      <div class="exp-meta">
+        <div class="role-dates">Sep 2025 – Dec 2025</div>
+        <div>Remote</div>
+      </div>
+      <div>
+        <div class="exp-role">Data Analyst Intern</div>
+        <div class="exp-company">@ Zorontech</div>
+        <ul class="exp-list">
+          <li>Cleaned and pre-processed raw datasets using normalization and transformation techniques to improve data quality.</li>
+          <li>Optimized Microsoft SQL queries to reduce execution time and improve reporting efficiency, while actively participating in peer code reviews to ensure code quality and system reliability.</li>
+          <li>Performed data validation and cleaning on spreadsheets using Microsoft Excel, ensuring accuracy and consistency for analysis.</li>
+          <li>Created analytical reports and dashboards using Tableau to present insights clearly to management.</li>
+          <li>Supported business decision-making by summarizing trends and key findings.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="exp-card fade-up" style="margin-top:20px;">
+      <div class="exp-meta">
+        <div class="role-dates">Jun 2026</div>
+        <div>Mohali, India</div>
+      </div>
+      <div>
+        <div class="exp-role">B.E. Computer Science</div>
+        <div class="exp-company">@ Chandigarh University</div>
+        <ul class="exp-list">
+          <li>Coursework and applied projects in database management, data cleaning, and business intelligence.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="container">
+    <div class="section-head fade-up">
+      <div class="eyebrow">04 — Projects</div>
+      <h2 class="section-title">Dashboards & analysis work</h2>
+      <p class="section-desc">Every chart below is live and interactive — filter by region or category, hover for exact values, sort the tables. This isn't a screenshot of a dashboard, it's an actual one.</p>
+    </div>
+
+    <!-- PROJECT 1: TABLEAU-STYLE RETAIL DASHBOARD -->
+    <div class="project fade-up">
+      <div class="project-card">
+        <div class="project-header">
+          <div>
+            <div class="project-name">Retail Sales & Profitability Dashboard</div>
+            <div class="project-tool">Built in <b>Tableau</b> · recreated here as a live web dashboard</div>
+            <p class="project-desc">Retail bike sales data analyzed for revenue, profit, and customer-segment trends. Filters and calculated fields drive dynamic analysis by region and category to guide sales strategy and inventory planning.</p>
+          </div>
+          <div class="project-stack">
+            <span class="chip">Tableau</span><span class="chip">KPIs</span><span class="chip">Regional analysis</span>
+          </div>
+        </div>
+        <div class="dash-body">
+          <div class="dash-controls" id="regionFilters">
+            <button class="filter-btn active" data-region="All">All Regions</button>
+            <button class="filter-btn" data-region="North">North</button>
+            <button class="filter-btn" data-region="South">South</button>
+            <button class="filter-btn" data-region="East">East</button>
+            <button class="filter-btn" data-region="West">West</button>
+          </div>
+
+          <div class="kpi-row">
+            <div class="kpi">
+              <div class="kpi-label">Total Sales</div>
+              <div class="kpi-value" id="kpiSales">$0</div>
+              <div class="kpi-delta up" id="kpiSalesDelta">▲ —</div>
+            </div>
+            <div class="kpi">
+              <div class="kpi-label">Total Profit</div>
+              <div class="kpi-value" id="kpiProfit">$0</div>
+              <div class="kpi-delta up" id="kpiProfitDelta">▲ —</div>
+            </div>
+            <div class="kpi">
+              <div class="kpi-label">Avg Margin</div>
+              <div class="kpi-value" id="kpiMargin">0%</div>
+              <div class="kpi-delta up" id="kpiMarginDelta">▲ —</div>
+            </div>
+            <div class="kpi">
+              <div class="kpi-label">Top Product</div>
+              <div class="kpi-value" id="kpiTopProduct" style="font-size:16px;">—</div>
+              <div class="kpi-delta up" id="kpiTopProductDelta">—</div>
+            </div>
+          </div>
+
+          <div class="chart-grid">
+            <div class="chart-box">
+              <div class="chart-box-title">Monthly Revenue & Profit Trend</div>
+              <div class="chart-canvas-wrap"><canvas id="retailTrendChart"></canvas></div>
+            </div>
+            <div class="chart-box">
+              <div class="chart-box-title">Sales by Product Category</div>
+              <div class="chart-canvas-wrap"><canvas id="retailCategoryChart"></canvas></div>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table id="retailTable">
+              <thead>
+                <tr>
+                  <th data-key="product">Product</th>
+                  <th data-key="region">Region</th>
+                  <th data-key="units">Units Sold</th>
+                  <th data-key="revenue">Revenue</th>
+                  <th data-key="profit">Profit</th>
+                </tr>
+              </thead>
+              <tbody id="retailTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROJECT 2: SQL CUSTOMER SEGMENTATION -->
+    <div class="project fade-up">
+      <div class="project-card">
+        <div class="project-header">
+          <div>
+            <div class="project-name">Customer Segmentation & Revenue Analysis</div>
+            <div class="project-tool">Built in <b>SQL</b> · JOINs, GROUP BY, subqueries, window functions</div>
+            <p class="project-desc">Complex SQL queries against sales and customer data to calculate revenue, average order value, repeat-customer rate, and top performers — optimized for accurate, fast reporting.</p>
+          </div>
+          <div class="project-stack">
+            <span class="chip">PostgreSQL</span><span class="chip">Window Functions</span><span class="chip">Cohort Analysis</span>
+          </div>
+        </div>
+        <div class="dash-body">
+          <div class="sql-editor">
+            <div class="sql-tabs" id="sqlTabs">
+              <div class="sql-tab active" data-q="revenue">revenue_by_segment.sql</div>
+              <div class="sql-tab" data-q="repeat">repeat_customers.sql</div>
+              <div class="sql-tab" data-q="top">top_products.sql</div>
+            </div>
+            <pre class="sql-pre" id="sqlPre"></pre>
+            <div class="run-row">
+              <button class="run-btn" id="runQueryBtn">▶ Run query</button>
+              <span class="run-status" id="runStatus">ready</span>
+            </div>
+          </div>
+
+          <div class="kpi-row" style="margin-top:20px;">
+            <div class="kpi">
+              <div class="kpi-label">Total Revenue</div>
+              <div class="kpi-value">$284,950</div>
+              <div class="kpi-delta up">▲ 12.4% vs last qtr</div>
+            </div>
+            <div class="kpi">
+              <div class="kpi-label">Avg Order Value</div>
+              <div class="kpi-value">$94.30</div>
+              <div class="kpi-delta up">▲ 4.1%</div>
+            </div>
+            <div class="kpi">
+              <div class="kpi-label">Repeat Customers</div>
+              <div class="kpi-value">38.6%</div>
+              <div class="kpi-delta up">▲ 2.9 pts</div>
+            </div>
+            <div class="kpi">
+              <div class="kpi-label">Active Segments</div>
+              <div class="kpi-value">4</div>
+              <div class="kpi-delta down">— stable</div>
+            </div>
+          </div>
+
+          <div class="chart-grid">
+            <div class="chart-box">
+              <div class="chart-box-title">Revenue by Customer Segment</div>
+              <div class="chart-canvas-wrap"><canvas id="segmentBarChart"></canvas></div>
+            </div>
+            <div class="chart-box">
+              <div class="chart-box-title">New vs Repeat Customers</div>
+              <div class="chart-canvas-wrap"><canvas id="repeatDonutChart"></canvas></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROJECT 3: EXCEL OPERATIONAL DATA QUALITY -->
+    <div class="project fade-up">
+      <div class="project-card">
+        <div class="project-header">
+          <div>
+            <div class="project-name">Operational Data Quality & Reporting</div>
+            <div class="project-tool">Built in <b>Excel</b> · VLOOKUP/XLOOKUP, IF, COUNTIFS, SUMIFS, Pivot Tables</div>
+            <p class="project-desc">Raw operational data cleaned for missing values, duplicates, and inconsistent formats, then summarized into stakeholder-ready charts and reports.</p>
+          </div>
+          <div class="project-stack">
+            <span class="chip">Excel</span><span class="chip">Pivot Tables</span><span class="chip">Data Cleaning</span>
+          </div>
+        </div>
+        <div class="dash-body">
+          <div class="xl-toolbar">
+            <button class="xl-fn-btn active-fn" data-fn="completeness">Data completeness</button>
+            <button class="xl-fn-btn" data-fn="duplicates">Duplicate detection</button>
+            <button class="xl-fn-btn" data-fn="pivot">Pivot summary</button>
+          </div>
+          <div class="formula-bar" id="formulaBar"><span>fx</span>&nbsp; =COUNTIFS(Status,"Missing")/COUNTA(Status)</div>
+
+          <div class="kpi-row">
+            <div class="kpi">
+              <div class="kpi-label">Records Processed</div>
+              <div class="kpi-value">12,480</div>
+              <div class="kpi-delta up">▲ cleaned</div>
+            </div>
+            <div class="kpi">
+              <div class="kpi-label">Missing Values Fixed</div>
+              <div class="kpi-value">643</div>
+              <div class="kpi-delta up">▼ 5.2% of total</div>
+            </div>
+            <div class="kpi">
+              <div class="kpi-label">Duplicates Removed</div>
+              <div class="kpi-value">211</div>
+              <div class="kpi-delta up">▼ 1.7% of total</div>
+            </div>
+            <div class="kpi">
+              <div class="kpi-label">Final Accuracy</div>
+              <div class="kpi-value">99.4%</div>
+              <div class="kpi-delta up">▲ from 91.1%</div>
+            </div>
+          </div>
+
+          <div class="chart-grid">
+            <div class="chart-box">
+              <div class="chart-box-title" id="xlChartTitle">Data Quality Issues by Field</div>
+              <div class="chart-canvas-wrap"><canvas id="qualityChart"></canvas></div>
+            </div>
+            <div class="chart-box">
+              <div class="chart-box-title">Before vs After Cleaning</div>
+              <div class="chart-canvas-wrap"><canvas id="beforeAfterChart"></canvas></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section id="contact">
+  <div class="container">
+    <div class="section-head fade-up">
+      <div class="eyebrow">05 — Contact</div>
+      <h2 class="section-title">Let's work together</h2>
+      <p class="section-desc">Open to data analyst roles and freelance dashboard work. Reach out directly or send a message below.</p>
+    </div>
+    <div class="contact-grid fade-up">
+      <div class="contact-list">
+        <a class="contact-item" href="mailto:tomaraaryan2003@gmail.com">
+          <span class="contact-icon">✉</span> tomaraaryan2003@gmail.com
+        </a>
+        <a class="contact-item" href="tel:+919068366206">
+          <span class="contact-icon">☏</span> +91 90683 66206
+        </a>
+        <a class="contact-item" href="#">
+          <span class="contact-icon">in</span> LinkedIn — /in/aaryantomar
+        </a>
+        <a class="contact-item" href="#">
+          <span class="contact-icon">⌖</span> Meerut, India
+        </a>
+      </div>
+      <form id="contactForm">
+        <div class="form-field">
+          <label for="cName">Name</label>
+          <input id="cName" name="name" type="text" placeholder="Your name" required>
+        </div>
+        <div class="form-field">
+          <label for="cEmail">Email</label>
+          <input id="cEmail" name="email" type="email" placeholder="you@example.com" required>
+        </div>
+        <div class="form-field">
+          <label for="cMsg">Message</label>
+          <textarea id="cMsg" name="message" placeholder="Tell me about the role or project..." required></textarea>
+        </div>
+        <button type="submit" class="btn-primary" id="submitBtn" style="width:100%;justify-content:center;">Send message →</button>
+        <div class="form-status" id="formStatus"></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container footer-inner">
+    <span>© 2026 Aaryan Tomar</span>
+    <span>built with curiosity & clean data</span>
+  </div>
+</footer>
+
+<script>
+/* ===================== FADE-UP ON SCROLL ===================== */
+const faders = document.querySelectorAll('.fade-up');
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+},{threshold:0.12});
+faders.forEach(f=>io.observe(f));
+
+/* ===================== HERO TYPED CONSOLE ===================== */
+const typedLineEl = document.getElementById('typedLine');
+const consoleResult = document.getElementById('consoleResult');
+const queryText = [
+  {t:'SELECT ', c:'kw'}, {t:'* '}, {t:'FROM ', c:'kw'}, {t:'analysts '},
+  {t:'WHERE ', c:'kw'}, {t:'name '}, {t:'= ', c:'kw'}, {t:"'Aaryan Tomar'", c:'str'}, {t:';'}
+];
+let charIndex = 0;
+const fullPlain = queryText.map(p=>p.t).join('');
+function typeNext(){
+  if(charIndex <= fullPlain.length){
+    let rendered = '';
+    let consumed = 0;
+    for(const part of queryText){
+      if(consumed >= charIndex) break;
+      const remaining = charIndex - consumed;
+      const slice = part.t.slice(0, remaining);
+      if(part.c) rendered += '<span class="'+part.c+'">'+slice+'</span>';
+      else rendered += slice;
+      consumed += part.t.length;
+    }
+    typedLineEl.innerHTML = rendered + '<span class="console-cursor"></span>';
+    charIndex++;
+    setTimeout(typeNext, 32);
+  } else {
+    setTimeout(()=>{ consoleResult.classList.add('show'); }, 300);
+  }
+}
+typeNext();
+
+/* ===================== PROJECT 1: RETAIL DASHBOARD ===================== */
+const retailData = [
+  {product:'Mountain Bike Pro', region:'North', units:182, revenue:54600, profit:14742},
+  {product:'Road Racer X1', region:'North', units:95, revenue:33250, profit:8645},
+  {product:'City Cruiser', region:'South', units:240, revenue:43200, profit:10368},
+  {product:'Mountain Bike Pro', region:'South', units:120, revenue:36000, profit:9720},
+  {product:'Electric Glide E2', region:'East', units:64, revenue:51200, profit:15360},
+  {product:'Road Racer X1', region:'East', units:88, revenue:30800, profit:7700},
+  {product:'City Cruiser', region:'West', units:175, revenue:31500, profit:7245},
+  {product:'Electric Glide E2', region:'West', units:52, revenue:41600, profit:11648},
+  {product:'Mountain Bike Pro', region:'East', units:140, revenue:42000, profit:11340},
+  {product:'Road Racer X1', region:'West', units:70, revenue:24500, profit:5635},
+  {product:'City Cruiser', region:'North', units:200, revenue:36000, profit:8640},
+  {product:'Electric Glide E2', region:'North', units:45, revenue:36000, profit:10800},
+];
+
+const monthLabels = ['Jan','Feb','Mar','Apr','May','Jun'];
+const monthlyByRegion = {
+  All:    {revenue:[28000,31200,29800,35400,38900,42100], profit:[7200,8100,7600,9300,10500,11800]},
+  North:  {revenue:[7200,8100,7600,9300,9800,10600], profit:[1900,2200,2000,2500,2700,3000]},
+  South:  {revenue:[6800,7300,7100,7900,8600,9200], profit:[1700,1850,1800,2050,2250,2450]},
+  East:   {revenue:[7100,7900,7400,8800,9700,10800], profit:[1950,2150,2000,2450,2750,3100]},
+  West:   {revenue:[6900,7900,7700,9400,10800,11500], profit:[1650,1900,1800,2300,2800,3250]},
+};
+
+let activeRegion = 'All';
+
+const trendCtx = document.getElementById('retailTrendChart');
+const trendChart = new Chart(trendCtx, {
+  type:'line',
+  data:{
+    labels: monthLabels,
+    datasets:[
+      {label:'Revenue', data:monthlyByRegion.All.revenue, borderColor:'#5B8DEF', backgroundColor:'rgba(91,141,239,0.12)', fill:true, tension:0.35, pointRadius:3, pointBackgroundColor:'#5B8DEF'},
+      {label:'Profit', data:monthlyByRegion.All.profit, borderColor:'#E8A33D', backgroundColor:'rgba(232,163,61,0.08)', fill:true, tension:0.35, pointRadius:3, pointBackgroundColor:'#E8A33D'},
+    ]
+  },
+  options: chartOptsLine()
+});
+
+function chartOptsLine(){
+  return {
+    responsive:true, maintainAspectRatio:false,
+    plugins:{ legend:{labels:{color:'#8A95A1', font:{family:'JetBrains Mono', size:11}}},
+      tooltip:{backgroundColor:'#161D26', borderColor:'#252E38', borderWidth:1, titleFont:{family:'JetBrains Mono'}, bodyFont:{family:'JetBrains Mono'}}},
+    scales:{
+      x:{ticks:{color:'#5C6773', font:{family:'JetBrains Mono', size:11}}, grid:{color:'#1A222B'}},
+      y:{ticks:{color:'#5C6773', font:{family:'JetBrains Mono', size:11}}, grid:{color:'#1A222B'}}
+    }
+  };
+}
+
+const catCtx = document.getElementById('retailCategoryChart');
+const catChart = new Chart(catCtx, {
+  type:'doughnut',
+  data:{
+    labels:['Mountain Bike Pro','Road Racer X1','City Cruiser','Electric Glide E2'],
+    datasets:[{
+      data:[0,0,0,0],
+      backgroundColor:['#5B8DEF','#E8A33D','#4FAE7D','#E0626B'],
+      borderColor:'#131A22', borderWidth:3
+    }]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    plugins:{ legend:{position:'bottom', labels:{color:'#8A95A1', font:{family:'JetBrains Mono', size:10}, boxWidth:10, padding:10}},
+      tooltip:{backgroundColor:'#161D26', borderColor:'#252E38', borderWidth:1}}
+  }
+});
+
+function formatMoney(n){ return '$' + n.toLocaleString('en-US'); }
+
+function updateRetailDashboard(region){
+  const filtered = region === 'All' ? retailData : retailData.filter(d=>d.region===region);
+
+  const totalSales = filtered.reduce((s,d)=>s+d.revenue,0);
+  const totalProfit = filtered.reduce((s,d)=>s+d.profit,0);
+  const avgMargin = totalSales ? (totalProfit/totalSales*100) : 0;
+
+  const byProduct = {};
+  filtered.forEach(d=>{ byProduct[d.product] = (byProduct[d.product]||0) + d.revenue; });
+  const topProduct = Object.entries(byProduct).sort((a,b)=>b[1]-a[1])[0];
+
+  document.getElementById('kpiSales').textContent = formatMoney(totalSales);
+  document.getElementById('kpiProfit').textContent = formatMoney(totalProfit);
+  document.getElementById('kpiMargin').textContent = avgMargin.toFixed(1) + '%';
+  document.getElementById('kpiTopProduct').textContent = topProduct ? topProduct[0] : '—';
+
+  document.getElementById('kpiSalesDelta').innerHTML = '▲ ' + (region==='All' ? '18.6% YoY' : 'in ' + region);
+  document.getElementById('kpiProfitDelta').innerHTML = '▲ ' + (region==='All' ? '14.2% YoY' : 'in ' + region);
+  document.getElementById('kpiMarginDelta').innerHTML = '▲ healthy range';
+  document.getElementById('kpiTopProductDelta').innerHTML = topProduct ? formatMoney(topProduct[1]) + ' rev' : '—';
+
+  const m = monthlyByRegion[region] || monthlyByRegion.All;
+  trendChart.data.datasets[0].data = m.revenue;
+  trendChart.data.datasets[1].data = m.profit;
+  trendChart.update();
+
+  const cats = ['Mountain Bike Pro','Road Racer X1','City Cruiser','Electric Glide E2'];
+  catChart.data.datasets[0].data = cats.map(c => byProduct[c] || 0);
+  catChart.update();
+
+  renderRetailTable(filtered, currentSortKey, currentSortDir);
+}
+
+let currentSortKey = 'revenue';
+let currentSortDir = -1;
+function renderRetailTable(data, key, dir){
+  const sorted = [...data].sort((a,b)=>{
+    if(typeof a[key] === 'string') return a[key].localeCompare(b[key]) * dir;
+    return (a[key]-b[key]) * dir;
+  });
+  const tbody = document.getElementById('retailTableBody');
+  tbody.innerHTML = sorted.map(d => `
+    <tr>
+      <td>${d.product}</td>
+      <td>${d.region}</td>
+      <td class="cell-num">${d.units}</td>
+      <td class="cell-num">${formatMoney(d.revenue)}</td>
+      <td class="cell-pos">${formatMoney(d.profit)}</td>
+    </tr>
+  `).join('');
+}
+
+document.querySelectorAll('#regionFilters .filter-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('#regionFilters .filter-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    activeRegion = btn.dataset.region;
+    updateRetailDashboard(activeRegion);
+  });
+});
+
+document.querySelectorAll('#retailTable thead th').forEach(th=>{
+  th.addEventListener('click', ()=>{
+    const key = th.dataset.key;
+    if(currentSortKey === key) currentSortDir *= -1;
+    else { currentSortKey = key; currentSortDir = -1; }
+    document.querySelectorAll('#retailTable thead th').forEach(t=>t.classList.remove('sorted'));
+    th.classList.add('sorted');
+    const filtered = activeRegion === 'All' ? retailData : retailData.filter(d=>d.region===activeRegion);
+    renderRetailTable(filtered, currentSortKey, currentSortDir);
+  });
+});
+
+updateRetailDashboard('All');
+
+/* ===================== PROJECT 2: SQL DASHBOARD ===================== */
+const sqlQueries = {
+  revenue: `<span class="k">SELECT</span>
+  c.segment,
+  <span class="f">SUM</span>(o.total_amount) <span class="k">AS</span> revenue,
+  <span class="f">COUNT</span>(<span class="k">DISTINCT</span> o.customer_id) <span class="k">AS</span> customers,
+  <span class="f">ROUND</span>(<span class="f">AVG</span>(o.total_amount), 2) <span class="k">AS</span> avg_order_value
+<span class="k">FROM</span> orders o
+<span class="k">JOIN</span> customers c <span class="k">ON</span> c.id = o.customer_id
+<span class="k">WHERE</span> o.order_date >= <span class="c">'2025-10-01'</span>
+<span class="k">GROUP BY</span> c.segment
+<span class="k">ORDER BY</span> revenue <span class="k">DESC</span>;`,
+
+  repeat: `<span class="k">WITH</span> order_counts <span class="k">AS</span> (
+  <span class="k">SELECT</span> customer_id, <span class="f">COUNT</span>(*) <span class="k">AS</span> orders
+  <span class="k">FROM</span> orders
+  <span class="k">GROUP BY</span> customer_id
+)
+<span class="k">SELECT</span>
+  <span class="f">CASE WHEN</span> orders > 1 <span class="k">THEN</span> <span class="c">'Repeat'</span> <span class="k">ELSE</span> <span class="c">'New'</span> <span class="k">END AS</span> customer_type,
+  <span class="f">COUNT</span>(*) <span class="k">AS</span> customer_count,
+  <span class="f">ROUND</span>(100.0 * <span class="f">COUNT</span>(*) / <span class="f">SUM</span>(<span class="f">COUNT</span>(*)) <span class="k">OVER</span> (), 1) <span class="k">AS</span> pct
+<span class="k">FROM</span> order_counts
+<span class="k">GROUP BY</span> customer_type;`,
+
+  top: `<span class="k">SELECT</span>
+  p.name,
+  <span class="f">SUM</span>(oi.quantity) <span class="k">AS</span> units_sold,
+  <span class="f">SUM</span>(oi.quantity * oi.unit_price) <span class="k">AS</span> revenue,
+  <span class="f">RANK</span>() <span class="k">OVER</span> (<span class="k">ORDER BY SUM</span>(oi.quantity * oi.unit_price) <span class="k">DESC</span>) <span class="k">AS</span> rank
+<span class="k">FROM</span> order_items oi
+<span class="k">JOIN</span> products p <span class="k">ON</span> p.id = oi.product_id
+<span class="k">GROUP BY</span> p.name
+<span class="k">LIMIT</span> 10;`
+};
+
+const sqlPre = document.getElementById('sqlPre');
+sqlPre.innerHTML = sqlQueries.revenue;
+
+document.querySelectorAll('#sqlTabs .sql-tab').forEach(tab=>{
+  tab.addEventListener('click', ()=>{
+    document.querySelectorAll('#sqlTabs .sql-tab').forEach(t=>t.classList.remove('active'));
+    tab.classList.add('active');
+    sqlPre.innerHTML = sqlQueries[tab.dataset.q];
+    document.getElementById('runStatus').textContent = 'ready';
+  });
+});
+
+document.getElementById('runQueryBtn').addEventListener('click', ()=>{
+  const status = document.getElementById('runStatus');
+  status.textContent = 'executing...';
+  status.style.color = '#E8A33D';
+  setTimeout(()=>{
+    status.textContent = '✓ query returned in 38ms';
+    status.style.color = '#4FAE7D';
+  }, 550);
+});
+
+const segmentCtx = document.getElementById('segmentBarChart');
+new Chart(segmentCtx, {
+  type:'bar',
+  data:{
+    labels:['Champions','Loyal','At Risk','New'],
+    datasets:[{
+      label:'Revenue',
+      data:[112400, 89200, 41300, 42050],
+      backgroundColor:['#5B8DEF','#5B8DEF','#E0626B','#4FAE7D'],
+      borderRadius:4,
+      maxBarThickness:48
+    }]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{display:false}, tooltip:{backgroundColor:'#161D26', borderColor:'#252E38', borderWidth:1}},
+    scales:{
+      x:{ticks:{color:'#5C6773', font:{family:'JetBrains Mono', size:11}}, grid:{display:false}},
+      y:{ticks:{color:'#5C6773', font:{family:'JetBrains Mono', size:11}}, grid:{color:'#1A222B'}}
+    }
+  }
+});
+
+const repeatCtx = document.getElementById('repeatDonutChart');
+new Chart(repeatCtx, {
+  type:'doughnut',
+  data:{
+    labels:['New Customers','Repeat Customers'],
+    datasets:[{data:[61.4, 38.6], backgroundColor:['#252E38','#5B8DEF'], borderColor:'#131A22', borderWidth:3}]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{position:'bottom', labels:{color:'#8A95A1', font:{family:'JetBrains Mono', size:11}, boxWidth:10}}}
+  }
+});
+
+/* ===================== PROJECT 3: EXCEL DASHBOARD ===================== */
+const qualityCtx = document.getElementById('qualityChart');
+const qualityChart = new Chart(qualityCtx, {
+  type:'bar',
+  data:{
+    labels:['Email','Phone','Address','Order Date','Customer ID'],
+    datasets:[{
+      label:'Issues found',
+      data:[214, 178, 96, 88, 67],
+      backgroundColor:'#E8A33D',
+      borderRadius:4,
+      maxBarThickness:36
+    }]
+  },
+  options:{
+    indexAxis:'y',
+    responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{display:false}, tooltip:{backgroundColor:'#161D26', borderColor:'#252E38', borderWidth:1}},
+    scales:{
+      x:{ticks:{color:'#5C6773', font:{family:'JetBrains Mono', size:11}}, grid:{color:'#1A222B'}},
+      y:{ticks:{color:'#8A95A1', font:{family:'JetBrains Mono', size:11}}, grid:{display:false}}
+    }
+  }
+});
+
+const baCtx = document.getElementById('beforeAfterChart');
+new Chart(baCtx, {
+  type:'bar',
+  data:{
+    labels:['Completeness','Uniqueness','Consistency','Accuracy'],
+    datasets:[
+      {label:'Before', data:[88.2,93.5,85.0,91.1], backgroundColor:'#E0626B', borderRadius:4, maxBarThickness:24},
+      {label:'After', data:[99.6,99.1,98.8,99.4], backgroundColor:'#4FAE7D', borderRadius:4, maxBarThickness:24}
+    ]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{labels:{color:'#8A95A1', font:{family:'JetBrains Mono', size:11}}}, tooltip:{backgroundColor:'#161D26', borderColor:'#252E38', borderWidth:1}},
+    scales:{
+      x:{ticks:{color:'#5C6773', font:{family:'JetBrains Mono', size:11}}, grid:{display:false}},
+      y:{ticks:{color:'#5C6773', font:{family:'JetBrains Mono', size:11}}, grid:{color:'#1A222B'}, min:80, max:100}
+    }
+  }
+});
+
+const formulaBar = document.getElementById('formulaBar');
+const xlChartTitle = document.getElementById('xlChartTitle');
+const formulas = {
+  completeness: '=COUNTIFS(Status,"Missing")/COUNTA(Status)',
+  duplicates: '=SUMPRODUCT((COUNTIFS(CustomerID,CustomerID)>1)*1)',
+  pivot: '=GETPIVOTDATA("Revenue",PivotTable1,"Field","Category")'
+};
+const titles = {
+  completeness: 'Data Quality Issues by Field',
+  duplicates: 'Duplicate Records by Field',
+  pivot: 'Pivot Summary — Issues by Field'
+};
+document.querySelectorAll('.xl-fn-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.xl-fn-btn').forEach(b=>b.classList.remove('active-fn'));
+    btn.classList.add('active-fn');
+    const fn = btn.dataset.fn;
+    formulaBar.innerHTML = '<span>fx</span>&nbsp; ' + formulas[fn];
+    xlChartTitle.textContent = titles[fn];
+    // slight data variation for visual feedback
+    if(fn === 'duplicates'){
+      qualityChart.data.datasets[0].data = [61,84,40,18,8];
+      qualityChart.data.datasets[0].backgroundColor = '#E0626B';
+    } else if(fn === 'pivot'){
+      qualityChart.data.datasets[0].data = [214,178,96,88,67].map(v=>Math.round(v*0.6));
+      qualityChart.data.datasets[0].backgroundColor = '#5B8DEF';
+    } else {
+      qualityChart.data.datasets[0].data = [214, 178, 96, 88, 67];
+      qualityChart.data.datasets[0].backgroundColor = '#E8A33D';
+    }
+    qualityChart.update();
+  });
+});
+
+/* ===================== CONTACT FORM ===================== */
+/* Replace YOUR_FORM_ID below with the ID Formspree gives you, e.g. https://formspree.io/f/abc123xy */
+const FORMSPREE_ENDPOINT = 'https://formspree.io/f/YOUR_FORM_ID';
+
+const contactForm = document.getElementById('contactForm');
+const submitBtn = document.getElementById('submitBtn');
+
+contactForm.addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const status = document.getElementById('formStatus');
+  const name = document.getElementById('cName').value.trim();
+
+  if (FORMSPREE_ENDPOINT.includes('YOUR_FORM_ID')) {
+    status.style.color = '#E0626B';
+    status.textContent = 'Form not connected yet — add your Formspree endpoint in the code.';
+    return;
+  }
+
+  submitBtn.textContent = 'Sending...';
+  submitBtn.disabled = true;
+  status.style.color = '#8A95A1';
+  status.textContent = '';
+
+  try {
+    const res = await fetch(FORMSPREE_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Accept': 'application/json' },
+      body: new FormData(contactForm)
+    });
+
+    if (res.ok) {
+      status.style.color = '#4FAE7D';
+      status.textContent = `Thanks${name ? ', ' + name : ''} — your message is on its way.`;
+      contactForm.reset();
+    } else {
+      status.style.color = '#E0626B';
+      status.textContent = 'Something went wrong sending that — try again or email me directly.';
+    }
+  } catch (err) {
+    status.style.color = '#E0626B';
+    status.textContent = 'Network error — try again or email me directly.';
+  } finally {
+    submitBtn.textContent = 'Send message →';
+    submitBtn.disabled = false;
+  }
+});
+
+/* ===================== MOBILE NAV (simple) ===================== */
+</script>
+</body>
+</html>
